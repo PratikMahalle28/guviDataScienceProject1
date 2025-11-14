@@ -2,209 +2,106 @@
 Client Query Management System: Organizing, Tracking, and Closing Support Queries
 Problem Statement:
 The Client Query Management System aims to provide a real-time interface for clients to submit queries and for support teams to manage them efficiently. The system uses a CSV dataset to simulate initial query logs, stores them in MySQL, and displays/query/modify them using Streamlit dashboards. The primary goal is to enhance communication between clients and support agents, improve query resolution speed, and track query status and performance metrics.
-Business Use Cases:
-Query Submission Interface: Allow clients to submit new queries in real-time.
 
+Description:-
+This project is a web-based application for managing client query management support organizing, tracking and closing support queries. It is built using the Streamlit framework for the front end and utilizes a MySQL database for data persistence. The application provides distinct interfaces for Clients (submitting issues) and Support Team members (managing and resolving tickets).
+
+Table of Contents
+1.Features
+2.Prerequisites
+3.Installation and Setup
+ 1. Database Configuration
+ 2. Project Dependencies
+ 3. Running the Application
+4.Usage Guide
+ i.  User Authentication
+ ii. Client Workflow
+ iii.Support Workflow
+5.Technical Details 
+
+1.Features
+ i.Secure Authentication: User registration and login using role-based access control (Client vs. Support). Passwords are securely hashed using SHA-256 before storage.
+ ii.Query Submission: A dedicated interface for clients to submit new support tickets with contact email, contact details, categories, headings, and descriptions.
+ iii.Support Dashboard: A comprehensive dashboard for support agents to view, filter (by status and category), and manage open queries.
+ iv.Automatic Tracking: Automated tracking of query creation and closure timestamps.
+ v.Query Assignment: Tickets are automatically assigned to the support agent who closes them.
+ 
+2.Prerequisites
+ Ensure you have the following installed before proceeding:
+  i.Python 3.8 or higher.
+  ii.MySQL Database
+  iii.VSCODE
+
+3.Installation and Setup
+ i. Database Configuration
+    The application is configured to connect to a MySQL database named querysystem.
+    Ensure your MySQL service is active.
+    Create the required database using your MySQL client:
+     sql 
+     CREATE DATABASE IF NOT EXISTS querysystem; 
+     Use code with caution.
+     Update Connection Credentials: You must modify the get_db_connection() function within the provided Python code (app.py) to match your local MySQL username and password:
+     python
+     def get_db_connection():
+     # ...
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="YOUR_MYSQL_PASSWORD_HERE", # <-- UPDATE THIS LINE
+            database='querysystem',
+            autocommit=True
+        )
+      # ... 
+  ii. Project Dependencies
+  Install the necessary Python libraries using pip:
+  "
+  pip install streamlit mysql-connector-python pandas
+  "
+  iii. Running the Application
+       Save all the provided Python source code into a single file named app.py.
+       Launch the application from your terminal using the Streamlit CLI:
+       "
+        streamlit run app.py
+       "
+      The application will automatically open in your default web browser (usually http://localhost:8501).
+      
+4.Usage Guide
+  Upon the first run, the database tables (users and queries) will be automatically created.
+  i.User Authentication
+       Use the sidebar navigation to switch between Login and Register pages.
+       Register at least one user with the Client role and one with the Support role to explore all system features.
+  ii.Client Workflow
+       Log in using a Client account.
+       The interface redirects you to the Submit a New Query page.
+       Fill out the required information (Email, Mobile, Category, Title, Details).
+       Click Submit Query. The ticket is created with Status: Open.
+  iii.Support Workflow
+       Log in using a Support account.
+       The interface redirects you to the Support Dashboard.
+       Use the filters to view queries.
+       Select a query and click the Close Query button to mark it as resolved. The system records your user ID and the closing time automatically.
+       
+5.Technical Details
+  The application follows a modular structure:
+  Database Management Functions: Handled by the mysql-connector-python library (get_db_connection, setup_database, etc.).
+  Authentication Logic: Implements hashlib.sha256 for secure password handling.
+  UI/UX: Managed entirely by the Streamlit framework, providing a responsive web interface without complex HTML/CSS/JS.
 
-Query Tracking Dashboard: Enable support teams to monitor and manage open/closed queries.
 
 
-Service Efficiency: Measure how quickly support queries are resolved.
 
 
-Customer Satisfaction: Faster query response leads to improved satisfaction.
 
 
-Support Load Monitoring: Identify the most common types of queries and backlogs.
-Approach:
-🔐 1. Login System (Client & Support Team)
-Each user (Client or Support) must register and log in to access the respective interface.
-Credentials are stored in an SQL-compatible database (e.g., SQLite, MySQL, etc.).
 
 
-Passwords are hashed securely using hashlib  or bcrypt (e.g., SHA-256) before storing in the database.
 
 
 
-Login Flow:
-User inputs: Username, Password, and Role (Client / Support).
 
 
-The password is hashed using hashlib.sha256(password.encode()).hexdigest() before storing.
 
 
-The users table contains:
 
 
-username (TEXT),
 
-
-hashed_password (TEXT),
-
-
-role (TEXT).
-
-
-Data is inserted using SQL queries like:
-
-
-
-
-
-Login Flow:
-User provides: Username and Password.
-
-
-The password is hashed with the same hashing function.
-
-
-The system checks for matching username and hashed_password in the database.
-
-If authenticated:
-
-
-If the role is Client → Redirect to Client Query Page.
-
-
-If the role is Support → Redirect to Support Dashboard.
-
-
-
-
-2. Query Insertion Page (Client Side)
-Inputs:
-
-
-Email ID
-
-
-Mobile Number
-
-
-Query Heading
-
-
-Query Description
-
-
-On Submission:
-
-
-query_created_time is auto-generated using datetime.now()
-
-
-status is marked as "Open" by default
-
-
-query_closed_time remains NULL
-
-
-
-3. Query Management Page (Support Team Side)
-Support team can:
-
-
-View and filter queries by status (Open/Closed) and category
-
-
-Select and close an open query
-
-
-On Closure:
-
-
-status is updated to "Closed"
-
-
-query_closed_time is auto-set using datetime.now()
-
-
-
-
-
-
-
-
-
-Results: 
-Fully functional web dashboard with:
-
-
-Live query intake
-
-
-Real-time monitoring and status updating
-
-
-Insight into query trends, resolution times, and support load.
-Project Evaluation metrics:
-✅ Maintainable Code
-
-
-✅ Portable Across Environments
-
-
-✅ Public GitHub Repository
-
-
-✅ Well-Documented README
-
-
-✅ Streamlit UI with Forms and Tables
-
-
-✅ Uses datetime and proper SQL Querying
-
-Technical Tags:
-Languages: Python
- Database: MySQL (using mysql-connector-python,SQL lite, no SQLAlchemy)
- Visualization Tools: Streamlit
- Libraries: Pandas, datetime, MySQL Connector
-Data Set:
-DataSet
-
-
-Data Set Explanation:
-CSV file with the following columns:
-query_id
-
-
-mail_id
-
-
-mobile_number
-
-
-query_heading
-
-
-query_description
-
-
-status (Open/Closed)
-
-
-query_created_time
-
-
-query_closed_time
-Project Deliverables:
-MySQL database containing cleaned query data
-
-
-Python scripts for:
-
-
-Inserting and updating MySQL using cursor-based SQL
-
-
-Frontend via Streamlit
-
-
-Streamlit app with 2 pages:
-
-
-Client Submission Page
-
-
-Support Team Dashboard
