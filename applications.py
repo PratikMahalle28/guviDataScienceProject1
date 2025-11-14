@@ -18,7 +18,7 @@ def get_db_connection():
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="Pratik28@", # <-- REPLACE WITH YOUR PASSWORD
+            password="Pratik28@",
             database='querysystem',
             autocommit=True
         )
@@ -33,11 +33,6 @@ def setup_database():
     cursor = conn.cursor()
     
     try:
-        # --- Add these lines to force a fresh start (TESTING ONLY) ---
-        # cursor.execute("DROP TABLE IF EXISTS queries;")
-        # cursor.execute("DROP TABLE IF EXISTS users;")
-        # -------------------------------------------------------------
-
         # Create users table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
@@ -335,4 +330,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
